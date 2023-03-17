@@ -6,28 +6,26 @@
   * работа с токеном,
   * система подтверждения через e-mail.
 * ### Клавдия Дунаева
-  Пишет модели, view и эндпойнты для
+  Пишет модели, view и эндпойнты для:
   * произведений,
   * категорий,
   * жанров;
 * ### Николай Артемьев
-  Пишет модели, view и эндпойнты для
+  Пишет модели, view и эндпойнты для:
   * отзывов,
   * комментариев,
   * рейтинг произведений.
-### Как запустить проект:
+  
+  Упаковывает приложение в контейнер
 
 В данном проекте использованы технологии:
-Python, Django, DRF, Api, Postman
-**Как запустить проект:**
+Docker, Python, Django, DRF, Api, Postman
+## Как запустить проект:
+
 Клонировать репозиторий и перейти в него в командной строке:
 
 ```
-git clone https://git@github.com:KlavaD/api_yamdb.git
-```
-
-```
-cd api_yamdb
+git clone https://git@github.com:Nikolay-ar/infra_sp2.git
 ```
 
 Создать и активировать виртуальное окружение:
@@ -60,35 +58,47 @@ python3 -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
+Перейти в папку infra:
+
+```
+cd infra
+```
+
+Запустить docker-compose:
+
+```
+docker-compose up -d --build
+```
+
 Выполнить миграции:
 
 ```
-python3 manage.py migrate
+docker-compose exec web python manage.py migrate
 ```
 
-Сделать импорт из csv файлов:
+Собрать статику:
 
 ```
-python manage.py addcsv
+docker-compose exec web python manage.py collectstatic --no-input
 ```
 
-Запустить проект:
+Теперь проект доступен по адресу http://localhost/
 
-```
-python3 manage.py runserver
-```
 ## Примеры запросов: ##
+Вход в админ панель:
+>**POST** http://localhost/admin/
+> 
 Регистрация нового пользователя:
->**POST** http://127.0.0.1:8000/api/v1/signup/
+>**POST** http://localhost/api/v1/signup/
 
 Для получения токена отправьте логин и код, который пришел вам на электронную почту:
->**POST** http://127.0.0.1:8000/api/v1/auth/token/
+>**POST** http://localhost/api/v1/auth/token/
 
 Получение списка произведений:
->**GET** http://127.0.0.1:8000/api/v1/titles/
+>**GET** http://localhost/api/v1/titles/
 
 Создание публикации (только администратор):
->**POST** http://127.0.0.1:8000/api/v1/titles/
+>**POST** http://localhost/api/v1/titles/
 > 
 ```
 {
@@ -103,16 +113,16 @@ python3 manage.py runserver
 ```
 
 Получение списка категорий:
->**GET** http://127.0.0.1:8000/api/v1/categories/
+>**GET** http://localhost/api/v1/categories/
 
 Получение списка жанров:
->**GET** http://127.0.0.1:8000/api/v1/genre/
+>**GET** http://localhost/api/v1/genre/
 
 Просмотр отзывов на произведение:
->**GET** http://127.0.0.1:8000/api/v1/titles/{title_id}/reviews/
+>**GET** http://localhost/api/v1/titles/{title_id}/reviews/
 
 Создание отзывов на произведение:
->**POST** http://127.0.0.1:8000/api/v1/titles/{title_id}/reviews/
+>**POST** http://localhost/api/v1/titles/{title_id}/reviews/
 ```
 {
 "text": "string",
@@ -121,14 +131,14 @@ python3 manage.py runserver
 ```
 
 Просмотр комментариев к отзыву:
->**GET** http://127.0.0.1:8000/api/v1/titles/{title_id}/reviews/{review_id}/commenta/
+>**GET** http://localhost/api/v1/titles/{title_id}/reviews/{review_id}/commenta/
 
 Создание комментария к отзыву:
->**Post** http://127.0.0.1:8000/api/v1/titles/{title_id}/reviews/{review_id}/commenta/
+>**Post** http://localhost/api/v1/titles/{title_id}/reviews/{review_id}/commenta/
 ```
 {
 "text": "string"
 }
 ```
 Остальные запросы можно посмотреть в документации для API Yamdb:
-> http://127.0.0.1:8000/redoc/
+> http://localhost/redoc/
