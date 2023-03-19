@@ -28,40 +28,21 @@ Docker, Python, Django, DRF, Api, Postman
 git clone https://git@github.com:Nikolay-ar/infra_sp2.git
 ```
 
-Создать и активировать виртуальное окружение:
-
-```
-python3 -m venv env
-```
-
-* Если у вас Linux/macOS
-
-    ```
-    source env/bin/activate
-    ```
-
-* Если у вас windows
-
-    ```
-    source env/scripts/activate
-    ```
-
-Обновить pip:
-
-```
-python3 -m pip install --upgrade pip
-```
-
-Установить зависимости из файла requirements.txt:
-
-```
-pip install -r requirements.txt
-```
-
 Перейти в папку infra:
 
 ```
 cd infra
+```
+
+Создайте файл .env с таким содержимым:
+
+```
+DB_ENGINE=django.db.backends.postgresql # указываем, что работаем с postgresql
+DB_NAME=postgres # имя базы данных
+POSTGRES_USER=postgres # логин для подключения к базе данных
+POSTGRES_PASSWORD=postgres # пароль для подключения к БД (установите свой)
+DB_HOST=db # название сервиса (контейнера)
+DB_PORT=5432 # порт для подключения к БД
 ```
 
 Запустить docker-compose:
@@ -76,10 +57,22 @@ docker-compose up -d --build
 docker-compose exec web python manage.py migrate
 ```
 
+Создать суперпользователя:
+
+```
+docker-compose exec web python manage.py createsuperuser
+```
+
 Собрать статику:
 
 ```
 docker-compose exec web python manage.py collectstatic --no-input
+```
+
+Для загрузки тестовой базы данных из fixtures.json - выполнить:
+
+```
+docker-compose exec web python manage.py loaddata fixtures.json
 ```
 
 Теперь проект доступен по адресу http://localhost/
@@ -91,7 +84,8 @@ docker-compose exec web python manage.py collectstatic --no-input
 Регистрация нового пользователя:
 >**POST** http://localhost/api/v1/signup/
 
-Для получения токена отправьте логин и код, который пришел вам на электронную почту:
+Для получения токена отправьте логин и код, который пришел вам на электронную 
+почту:
 >**POST** http://localhost/api/v1/auth/token/
 
 Получение списка произведений:
